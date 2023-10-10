@@ -53,9 +53,9 @@ public class Main {
 		byte casos = 0;
 		do {
 			JOptionPane.showMessageDialog(null, "Palabra: " + new String(palabraGuiones));
-            JOptionPane.showMessageDialog(null, "Vidas que te quedan: " + vidas);
-            String letraInput = JOptionPane.showInputDialog("Dime una letra: ");
-            char letra = letraInput.charAt(0);
+			JOptionPane.showMessageDialog(null, "Vidas que te quedan: " + vidas);
+			String letraInput = JOptionPane.showInputDialog("Dime una letra: ");
+			char letra = letraInput.charAt(0);
 
 			boolean letraEncontrada = false;
 
