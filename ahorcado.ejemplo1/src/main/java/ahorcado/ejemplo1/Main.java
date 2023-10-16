@@ -11,6 +11,10 @@ public class Main {
 
 		Random random = new Random();
 
+		JOptionPane.showMessageDialog(null, 
+				"Bienvenido al Juego del Ahorcado ","Bienvenido", 
+				JOptionPane.INFORMATION_MESSAGE);
+		
 		String[] palabras = { "manzana", "pera", "balon", "ordenador", "fruta", "guitarra", "bicicleta", "cuchillo",
 				"teclado", "radio", "pelota", "silla", "reloj", "mesa", "telefono", "nube", "pantalla", "sol", "luna",
 				"estrella", "gato", "perro", "elefante", "tigre", "leopardo", "mariposa", "abeja", "araña", "mosquito",

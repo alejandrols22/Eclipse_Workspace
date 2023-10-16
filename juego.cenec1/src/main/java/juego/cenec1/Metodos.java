@@ -1,108 +1,123 @@
 package juego.cenec1;
 
 import javax.swing.*;
+
 import java.util.Random;
 
+import java.util.Scanner;
+
 public class Metodos {
-    private final int SIZE = 10;
-    private final char WATER = '~';
-    private final char SHIP = 'S';
-    private final char HIT = 'X';
-    private final char MISS = 'O';
 
-    public char[][] initializeBoard() {
-        char[][] board = new char[SIZE][SIZE];
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                board[i][j] = WATER;
-            }
-        }
-        return board;
-    }
+	int TABLERO_TAMANO = 10;
+	char[][] tableroJugador1 = new char[TABLERO_TAMANO][TABLERO_TAMANO];
+	char[][] tableroJugador2 = new char[TABLERO_TAMANO][TABLERO_TAMANO];
+	char VACIO = '~';
+	char BARCO = 'B';
+	char AGUA = 'A';
+	char TOCADO = 'T';
 
-    public void placeShips(char[][] board, boolean isAI) {
-        int[] ships = {2, 3, 4, 5};
-        for (int ship : ships) {
-            placeSingleShip(board, ship, isAI);
-        }
-    }
+	public boolean realizarTurno(Scanner scanner, char[][] tableroOponente) {
+		mostrarTablero(tableroOponente);
 
-    private void placeSingleShip(char[][] board, int shipSize, boolean isAI) {
-        Random random = new Random();
-        boolean placed = false;
-        while (!placed) {
-            int x = random.nextInt(SIZE);
-            int y = random.nextInt(SIZE);
-            boolean horizontal = random.nextBoolean();
-            if (canPlaceShip(board, x, y, shipSize, horizontal)) {
-                for (int i = 0; i < shipSize; i++) {
-                    if (horizontal) {
-                        board[x][y + i] = SHIP;
-                    } else {
-                        board[x + i][y] = SHIP;
-                    }
-                }
-                placed = true;
-            }
-        }
-    }
+		System.out.println("Introduce fila (0-9):");
+		int fila = scanner.nextInt();
+		System.out.println("Introduce columna (0-9):");
+		int columna = scanner.nextInt();
 
-    private boolean canPlaceShip(char[][] board, int x, int y, int shipSize, boolean horizontal) {
-        for (int i = 0; i < shipSize; i++) {
-            if (horizontal) {
-                if (y + i >= SIZE || board[x][y + i] == SHIP) {
-                    return false;
-                }
-            } else {
-                if (x + i >= SIZE || board[x + i][y] == SHIP) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
+		if (tableroOponente[fila][columna] == BARCO) {
+			System.out.println("¡Tocado!");
+			tableroOponente[fila][columna] = TOCADO;
+			if (comprobarFlotaHundida(tableroOponente)) {
+				return true;
+			}
+		} else {
+			System.out.println("¡Agua!");
+			tableroOponente[fila][columna] = AGUA;
+		}
+		return false;
+	}
 
-    public boolean isAllShipsSunk(char[][] board) {
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                if (board[i][j] == SHIP) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
+	public void inicializarTablero(char[][] tablero) {
+		for (int i = 0; i < TABLERO_TAMANO; i++) {
+			for (int j = 0; j < TABLERO_TAMANO; j++) {
+				tablero[i][j] = VACIO;
+			}
+		}
+	}
 
-    public boolean shoot(char[][] board, int x, int y) {
-        if (board[x][y] == SHIP) {
-            board[x][y] = HIT;
-            return true;
-        } else {
-            board[x][y] = MISS;
-            return false;
-        }
-    }
+	public void colocarFlota(Scanner scanner, char[][] tablero) {
+		int[] tamanos = { 2, 3, 4, 5 };
+		for (int tamano : tamanos) {
+			boolean colocado = false;
+			while (!colocado) {
+				mostrarTablero(tablero);
+				System.out.println("Coloca un barco de tamaño " + tamano);
+				System.out.println("Introduce fila inicial (0-9):");
+				int fila = scanner.nextInt();
+				System.out.println("Introduce columna inicial (0-9):");
+				int columna = scanner.nextInt();
+				System.out.println("Orientación (h/v):");
+				char orientacion = scanner.next().charAt(0);
+				if (puedeColocarBarco(fila, columna, tamano, orientacion, tablero)) {
+					colocarBarco(fila, columna, tamano, orientacion, tablero);
+					colocado = true;
+				} else {
+					System.out.println("No puedes colocar el barco ahí. Intenta de nuevo.");
+				}
+			}
+		}
+	}
 
-    public int[] aiShoot(char[][] board) {
-        Random random = new Random();
-        int x, y;
-        do {
-            x = random.nextInt(SIZE);
-            y = random.nextInt(SIZE);
-        } while (board[x][y] == HIT || board[x][y] == MISS);
+	public boolean puedeColocarBarco(int fila, int columna, int tamano, char orientacion, char[][] tablero) {
+		if (orientacion == 'h') {
+			if (columna + tamano > TABLERO_TAMANO) {
+				return false;
+			}
+			for (int i = 0; i < tamano; i++) {
+				if (tablero[fila][columna + i] == BARCO) {
+					return false;
+				}
+			}
+		} else {
+			if (fila + tamano > TABLERO_TAMANO) {
+				return false;
+			}
+			for (int i = 0; i < tamano; i++) {
+				if (tablero[fila + i][columna] == BARCO) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 
-        shoot(board, x, y);
-        return new int[]{x, y};
-    }
+	public void colocarBarco(int fila, int columna, int tamano, char orientacion, char[][] tablero) {
+		for (int i = 0; i < tamano; i++) {
+			if (orientacion == 'h') {
+				tablero[fila][columna + i] = BARCO;
+			} else {
+				tablero[fila + i][columna] = BARCO;
+			}
+		}
+	}
 
-    public String boardToString(char[][] board) {
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                builder.append(board[i][j]).append(" ");
-            }
-            builder.append("\n");
-        }
-        return builder.toString();
-    }
+	public boolean comprobarFlotaHundida(char[][] tablero) {
+		for (int i = 0; i < TABLERO_TAMANO; i++) {
+			for (int j = 0; j < TABLERO_TAMANO; j++) {
+				if (tablero[i][j] == BARCO) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	public void mostrarTablero(char[][] tablero) {
+		for (int i = 0; i < TABLERO_TAMANO; i++) {
+			for (int j = 0; j < TABLERO_TAMANO; j++) {
+				System.out.print(tablero[i][j] + " ");
+			}
+			System.out.println();
+		}
+	}
 }
