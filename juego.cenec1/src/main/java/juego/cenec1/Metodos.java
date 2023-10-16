@@ -8,9 +8,9 @@ import java.util.Scanner;
 
 public class Metodos {
 
-	int TABLERO_TAMANO = 10;
-	char[][] tableroJugador1 = new char[TABLERO_TAMANO][TABLERO_TAMANO];
-	char[][] tableroJugador2 = new char[TABLERO_TAMANO][TABLERO_TAMANO];
+	int TABLERO_TAMAÑO = 10;
+	char[][] tableroJugador1 = new char[TABLERO_TAMAÑO][TABLERO_TAMAÑO];
+	char[][] tableroJugador2 = new char[TABLERO_TAMAÑO][TABLERO_TAMAÑO];
 	char VACIO = '~';
 	char BARCO = 'B';
 	char AGUA = 'A';
@@ -38,8 +38,8 @@ public class Metodos {
 	}
 
 	public void inicializarTablero(char[][] tablero) {
-		for (int i = 0; i < TABLERO_TAMANO; i++) {
-			for (int j = 0; j < TABLERO_TAMANO; j++) {
+		for (int i = 0; i < TABLERO_TAMAÑO; i++) {
+			for (int j = 0; j < TABLERO_TAMAÑO; j++) {
 				tablero[i][j] = VACIO;
 			}
 		}
@@ -70,7 +70,7 @@ public class Metodos {
 
 	public boolean puedeColocarBarco(int fila, int columna, int tamano, char orientacion, char[][] tablero) {
 		if (orientacion == 'h') {
-			if (columna + tamano > TABLERO_TAMANO) {
+			if (columna + tamano > TABLERO_TAMAÑO) {
 				return false;
 			}
 			for (int i = 0; i < tamano; i++) {
@@ -79,7 +79,7 @@ public class Metodos {
 				}
 			}
 		} else {
-			if (fila + tamano > TABLERO_TAMANO) {
+			if (fila + tamano > TABLERO_TAMAÑO) {
 				return false;
 			}
 			for (int i = 0; i < tamano; i++) {
@@ -102,8 +102,8 @@ public class Metodos {
 	}
 
 	public boolean comprobarFlotaHundida(char[][] tablero) {
-		for (int i = 0; i < TABLERO_TAMANO; i++) {
-			for (int j = 0; j < TABLERO_TAMANO; j++) {
+		for (int i = 0; i < TABLERO_TAMAÑO; i++) {
+			for (int j = 0; j < TABLERO_TAMAÑO; j++) {
 				if (tablero[i][j] == BARCO) {
 					return false;
 				}
@@ -113,8 +113,8 @@ public class Metodos {
 	}
 
 	public void mostrarTablero(char[][] tablero) {
-		for (int i = 0; i < TABLERO_TAMANO; i++) {
-			for (int j = 0; j < TABLERO_TAMANO; j++) {
+		for (int i = 0; i < TABLERO_TAMAÑO; i++) {
+			for (int j = 0; j < TABLERO_TAMAÑO; j++) {
 				System.out.print(tablero[i][j] + " ");
 			}
 			System.out.println();
