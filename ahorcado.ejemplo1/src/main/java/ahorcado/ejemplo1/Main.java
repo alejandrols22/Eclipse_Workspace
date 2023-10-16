@@ -64,19 +64,19 @@ public class Main {
 		do {
 			JOptionPane.showMessageDialog(null, "Palabra: " + new String(palabraGuiones));
 			JOptionPane.showMessageDialog(null, "Vidas que te quedan: " + vidas);
+			
 			String letraInput = JOptionPane.showInputDialog("Dime una letra: ");
-			char letra = letraInput.charAt(0); // letra que utiliza para consultar si esta en la palabra original
+			char letra = letraInput.toLowerCase().charAt(0); // Convertimos la letra ingresada a minúsculas
 
-			boolean letraEncontrada = false; // En caso de que no este la palabra
+			boolean letraEncontrada = false;
 
-			for (int i = 0; i < palabraAleatoria.length(); i++) { // Bucle for para buscar si la letra esta en la
-																	// palabra original
-				if (palabraAleatoria.charAt(i) == letra) { // Condicional If que funciona si la letra existe en la
-															// palabra original
-					palabraGuiones[i] = letra; // Cambiamos el guion por la letra que coincide con la palabra original
-					letraEncontrada = true;
-				}
+			for (int i = 0; i < palabraAleatoria.length(); i++) {
+			    if (palabraAleatoria.charAt(i) == letra || palabraAleatoria.toLowerCase().charAt(i) == letra) { // Convertimos la letra de la palabra a minúscula para la comparación
+			        palabraGuiones[i] = palabraAleatoria.charAt(i); // Aquí es importante no cambiar la letra original a minúscula, ya que queremos que se muestre tal cual es en la palabra original
+			        letraEncontrada = true;
+			    }
 			}
+			
 
 			if (!letraEncontrada) { // Condicional que sucede si no existe ninguna letra que coincida con la palabra
 									// original
